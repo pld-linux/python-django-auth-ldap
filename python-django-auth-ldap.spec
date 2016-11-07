@@ -20,7 +20,7 @@ URL:		http://bitbucket.org/psagers/django-auth-ldap/
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with python2}
-BuildRequires:	python-devel
+BuildRequires:	python-modules
 BuildRequires:	python-setuptools
 BuildRequires:	sphinx-pdg
 %endif
@@ -29,15 +29,13 @@ BuildRequires:	python-mockldap >= 0.2.7
 BuildRequires:	python-setuptools >= 0.6c11
 %endif
 %if %{with python3}
-BuildRequires:	python3-devel
+BuildRequires:	python3-modules
 BuildRequires:	python3-setuptools
-%endif
 %if %{with tests}
 BuildRequires:	python3-mockldap >= 0.2.7
 BuildRequires:	python3-setuptools >= 0.6c11
 %endif
-Requires:	python-django
-Requires:	python-ldap >= 2.0
+%endif
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -48,8 +46,6 @@ LDAP service.
 %package -n python3-%{pypi_name}
 Summary:	Django LDAP authentication backend
 Group:		Libraries/Python
-Requires:	python3-django
-Requires:	python3-ldap >= 2.0
 
 %description -n python3-%{pypi_name}
 This is a Django authentication backend that authenticates against an

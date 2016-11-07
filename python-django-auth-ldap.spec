@@ -3,7 +3,7 @@
 %bcond_with	doc	# don't build doc
 %bcond_with	tests	# do not perform "make test"
 %bcond_without	python2 # CPython 2.x module
-%bcond_without	python3 # CPython 3.x module
+%bcond_with	python3 # CPython 3.x module
 
 %define 	module		django_auth_ldap
 %define 	egg_name	django_auth_ldap

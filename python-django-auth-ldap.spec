@@ -11,7 +11,7 @@
 Summary:	Django LDAP authentication backend
 Name:		python-%{pypi_name}
 Version:	1.2.8
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries/Python
 Source0:	https://files.pythonhosted.org/packages/source/d/%{pypi_name}/%{pypi_name}-%{version}.tar.gz

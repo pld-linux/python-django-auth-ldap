@@ -26,14 +26,14 @@ BuildRequires:	sphinx-pdg
 %endif
 %if %{with tests}
 BuildRequires:	python-mockldap >= 0.2.7
-BuildRequires:	python-setuptools >= 0.6c11
+BuildRequires:	python-setuptools >= 1:0.6-0.c11
 %endif
 %if %{with python3}
 BuildRequires:	python3-modules
 BuildRequires:	python3-setuptools
 %if %{with tests}
 BuildRequires:	python3-mockldap >= 0.2.7
-BuildRequires:	python3-setuptools >= 0.6c11
+BuildRequires:	python3-setuptools >= 1:0.6-0.c11
 %endif
 %endif
 BuildArch:	noarch

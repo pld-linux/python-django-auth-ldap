@@ -1,7 +1,7 @@
 #
 # Conditional build:
-%bcond_with	doc	# don't build doc
-%bcond_with	tests	# do not perform "make test"
+%bcond_with	doc	# Sphinx documentation (TODO)
+%bcond_with	tests	# unit tests (TODO)
 %bcond_without	python2 # CPython 2.x module
 %bcond_with	python3 # CPython 3.x module
 
@@ -9,12 +9,14 @@
 %define 	egg_name	django_auth_ldap
 %define		pypi_name	django-auth-ldap
 Summary:	Django LDAP authentication backend
+Summary(pl.UTF-8):	Backend uwierzytelniający LDAP dla Django
 Name:		python-%{pypi_name}
 Version:	1.2.8
 Release:	2
 License:	BSD
 Group:		Libraries/Python
-Source0:	https://files.pythonhosted.org/packages/source/d/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+#Source0Download: https://pypi.org/simple/django-auth-ldap/
+Source0:	https://files.pythonhosted.org/packages/source/d/django-auth-ldap/%{pypi_name}-%{version}.tar.gz
 # Source0-md5:	88db539ca8492c91a8adaca68d70129b
 URL:		http://bitbucket.org/psagers/django-auth-ldap/
 BuildRequires:	rpm-pythonprov
@@ -43,13 +45,22 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 This is a Django authentication backend that authenticates against an
 LDAP service.
 
+%description -l pl.UTF-8
+Ten pakiet to backend uwierzytelniający Django uwierzytelniający
+względem usługi LDAP.
+
 %package -n python3-%{pypi_name}
 Summary:	Django LDAP authentication backend
+Summary(pl.UTF-8):	Backend uwierzytelniający LDAP dla Django
 Group:		Libraries/Python
 
 %description -n python3-%{pypi_name}
 This is a Django authentication backend that authenticates against an
 LDAP service.
+
+%description -n python3-%{pypi_name} -l pl.UTF-8
+Ten pakiet to backend uwierzytelniający Django uwierzytelniający
+względem usługi LDAP.
 
 %prep
 %setup -q -n %{pypi_name}-%{version}
@@ -72,8 +83,10 @@ sphinx-build-2 docs/source html
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %if %{with python2}
 %py_install
+
 %py_postclean
 %endif
 

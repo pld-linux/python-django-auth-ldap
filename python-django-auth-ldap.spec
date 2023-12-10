@@ -1,9 +1,9 @@
 #
 # Conditional build:
-%bcond_with	doc	# Sphinx documentation (TODO)
-%bcond_with	tests	# unit tests (TODO)
+%bcond_without	doc	# Sphinx documentation
+%bcond_with	tests	# unit tests (require slapd and some configuration)
 %bcond_without	python2 # CPython 2.x module
-%bcond_with	python3 # CPython 3.x module
+%bcond_without	python3 # CPython 3.x module
 
 %define 	module		django_auth_ldap
 %define 	egg_name	django_auth_ldap
@@ -11,32 +11,41 @@
 Summary:	Django LDAP authentication backend
 Summary(pl.UTF-8):	Backend uwierzytelniający LDAP dla Django
 Name:		python-%{pypi_name}
-Version:	1.2.8
-Release:	2
+# keep 1.x here for python2 support
+Version:	1.7.0
+Release:	1
 License:	BSD
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/django-auth-ldap/
 Source0:	https://files.pythonhosted.org/packages/source/d/django-auth-ldap/%{pypi_name}-%{version}.tar.gz
-# Source0-md5:	88db539ca8492c91a8adaca68d70129b
+# Source0-md5:	bb85e5e50ea179781244df580ee5b0f0
+Patch0:		django-auth-ldap-mock.patch
 URL:		http://bitbucket.org/psagers/django-auth-ldap/
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with python2}
-BuildRequires:	python-modules
-BuildRequires:	python-setuptools
-BuildRequires:	sphinx-pdg
-%endif
-%if %{with tests}
-BuildRequires:	python-mockldap >= 0.2.7
+BuildRequires:	python-modules >= 1:2.7
 BuildRequires:	python-setuptools >= 1:0.6-0.c11
 %endif
-%if %{with python3}
-BuildRequires:	python3-modules
-BuildRequires:	python3-setuptools
 %if %{with tests}
-BuildRequires:	python3-mockldap >= 0.2.7
-BuildRequires:	python3-setuptools >= 1:0.6-0.c11
+BuildRequires:	openldap-servers
+BuildRequires:	python-django >= 1.11
+BuildRequires:	python-ldap >= 3.1
+BuildRequires:	python-mock >= 2.0.0
+BuildRequires:	python-slapdtest
 %endif
+%if %{with python3}
+BuildRequires:	python3-modules >= 1:3.4
+BuildRequires:	python3-setuptools >= 1:0.6-0.c11
+%if %{with tests}
+BuildRequires:	openldap-servers
+BuildRequires:	python3-django >= 1.11
+BuildRequires:	python3-ldap >= 3.1
+BuildRequires:	python3-slapdtest
+%endif
+%endif
+%if %{with doc}
+BuildRequires:	sphinx-pdg-2
 %endif
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -62,8 +71,20 @@ LDAP service.
 Ten pakiet to backend uwierzytelniający Django uwierzytelniający
 względem usługi LDAP.
 
+%package apidocs
+Summary:	API documentation for django-auth-ldap module
+Summary(pl.UTF-8):	Dokumentacja API modułu django-auth-ldap
+Group:		Documentation
+
+%description apidocs
+API documentation for django-auth-ldap module.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API modułu django-auth-ldap.
+
 %prep
 %setup -q -n %{pypi_name}-%{version}
+%patch0 -p1
 
 %{__rm} -r %{egg_name}.egg-info
 
@@ -77,8 +98,7 @@ względem usługi LDAP.
 %endif
 
 %if %{with doc}
-sphinx-build-2 docs/source html
-%{__rm} -r html/.{doctrees,buildinfo}
+sphinx-build-2 -b html docs docs/_build/html
 %endif
 
 %install
@@ -100,6 +120,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python2}
 %files
 %defattr(644,root,root,755)
+%doc CHANGES LICENSE README.rst
 %{py_sitescriptdir}/%{module}
 %{py_sitescriptdir}/%{egg_name}-%{version}-py*.egg-info
 %endif
@@ -107,6 +128,13 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python3}
 %files -n python3-%{pypi_name}
 %defattr(644,root,root,755)
+%doc CHANGES LICENSE README.rst
 %{py3_sitescriptdir}/%{module}
 %{py3_sitescriptdir}/%{egg_name}-%{version}-py*.egg-info
+%endif
+
+%if %{with doc}
+%files apidocs
+%defattr(644,root,root,755)
+%doc docs/_build/html/{_static,*.html,*.js}
 %endif

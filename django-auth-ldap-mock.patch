@@ -1,0 +1,24 @@
+--- django-auth-ldap-1.7.0/setup.py.orig	2018-07-12 12:17:22.000000000 +0200
++++ django-auth-ldap-1.7.0/setup.py	2023-12-10 19:41:30.704536889 +0100
+@@ -54,6 +54,6 @@ setup(
+         "setuptools >= 0.6c11",
+     ],
+     tests_require=[
+-        "mock >= 2.0.0",
++        "mock >= 2.0.0; python_version<'3.0'",
+     ]
+ )
+--- django-auth-ldap-1.7.0/tests/tests.py.orig	2018-07-12 12:29:06.000000000 +0200
++++ django-auth-ldap-1.7.0/tests/tests.py	2023-12-10 19:42:11.224317374 +0100
+@@ -36,7 +36,10 @@ import pickle
+ import warnings
+ 
+ import ldap
+-import mock
++try:
++    from unittest import mock
++except ImportError:
++    import mock
+ import slapdtest
+ 
+ from django.contrib.auth import authenticate, get_backends

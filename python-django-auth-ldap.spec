@@ -84,7 +84,7 @@ Dokumentacja API modułu django-auth-ldap.
 
 %prep
 %setup -q -n %{pypi_name}-%{version}
-%patch0 -p1
+%patch -P 0 -p1
 
 %{__rm} -r %{egg_name}.egg-info
 
